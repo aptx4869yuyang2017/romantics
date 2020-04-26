@@ -11,7 +11,6 @@ class Lexer {
 
     while (it.hasNext()) {
       let c = it.next();
-      console.log("tokens", tokens);
 
       if (c === "\0") {
         break;

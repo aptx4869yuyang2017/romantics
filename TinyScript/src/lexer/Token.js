@@ -301,9 +301,6 @@ class Token {
     while (it.hasNext()) {
       let lookahead = it.peek();
 
-      console.log("s", s, "lookahead", lookahead, "hasNext", it.hasNext());
-      console.log("nothing");
-
       switch (state) {
         case 0: {
           if (lookahead === "0") {
@@ -382,7 +379,6 @@ class Token {
       }
       s += lookahead;
       it.next();
-      console.log(it.hasNext());
     } // end while
 
     throw new LexicalException("Unexpected Error");
