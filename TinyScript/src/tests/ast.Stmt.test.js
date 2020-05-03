@@ -4,7 +4,7 @@ const PeekTokenIterator = require('../parser/util/PeekTokenIterator');
 const ParserUtils = require('../parser/util/ParserUtils');
 const path = require('path');
 const { assert } = require('chai');
-const { AssignStmt, DeclareStmt } = require('../parser/ast/index');
+const { AssignStmt, DeclareStmt, IfStmt } = require('../parser/ast/index');
 
 describe('Stmts', () => {
   it('assign', () => {
@@ -17,6 +17,22 @@ describe('Stmts', () => {
     const it = createTokenIt('var i = 100 * 2');
     const stmt = DeclareStmt.parse(it);
     assert.equal(ParserUtils.toPostfixExpression(stmt), 'i 100 2 * =');
+  });
+
+  it('ifStmt', () => {
+    const it = createTokenIt(`if(a){
+      var a = 1
+    }`);
+
+    const stmt = IfStmt.parse(it);
+    const expr = stmt.getExpr();
+    const block = stmt.getBlock();
+    const assignStmt = block.getChild(0);
+    const elseBlock = stmt.getChild(2);
+
+    assert.equal(expr.getLexeme().getValue(), 'a');
+    assert.equal(assignStmt.getLexeme().getValue(), '=');
+    assert.equal(null, elseBlock);
   });
 });
 
