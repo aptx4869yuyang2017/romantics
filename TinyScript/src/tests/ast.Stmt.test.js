@@ -4,13 +4,18 @@ const PeekTokenIterator = require('../parser/util/PeekTokenIterator');
 const ParserUtils = require('../parser/util/ParserUtils');
 const path = require('path');
 const { assert } = require('chai');
-const { AssignStmt } = require('../parser/ast/index');
+const { AssignStmt, DeclareStmt } = require('../parser/ast/index');
 
 describe('Stmts', () => {
   it('assign', () => {
     const it = createTokenIt('i = 100 * 2');
     const stmt = AssignStmt.parse(it);
-    stmt.print();
+    assert.equal(ParserUtils.toPostfixExpression(stmt), 'i 100 2 * =');
+  });
+
+  it('declare', () => {
+    const it = createTokenIt('var i = 100 * 2');
+    const stmt = DeclareStmt.parse(it);
     assert.equal(ParserUtils.toPostfixExpression(stmt), 'i 100 2 * =');
   });
 });
