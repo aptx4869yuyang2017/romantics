@@ -1,8 +1,8 @@
 class ASDNode {
-  constructor(_parent, _type = null, _label = null) {
+  constructor(_type = null, _label = null) {
     /* 树结构 */
     this.children = [];
-    this.parent = _parent;
+    this.parent = null;
 
     /* 关键信息 */
     this.lexeme = null;
@@ -27,7 +27,7 @@ class ASDNode {
   }
 
   print(indent = 0) {
-    console.log(`${"".padStart(indent * 2, " ")}${this.label}`);
+    console.log(`${''.padStart(indent * 2, ' ')}${this.label}`);
     this.children.forEach(x => x.print(indent + 1));
   }
 }
