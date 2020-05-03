@@ -1,4 +1,5 @@
 const ASTNodeTypes = require('../ast/ASTNodeTypes');
+const Factor = require('../ast/Factor');
 
 class ParserUtils {
   // postfix
