@@ -5,7 +5,9 @@ class ParseException extends Error {
 
   static fromToken(token) {
     return new ParseException(
-      `Syntax Error, unexcepted token ${token.getValeu()}`
+      `Syntax Error, unexcepted token ${token.getValue()}`
     );
   }
 }
+
+module.exports = ParseException;
