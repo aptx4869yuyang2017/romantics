@@ -1,4 +1,5 @@
-const PeekIterator = require("../../common/PeekIterator");
+const PeekIterator = require('../../common/PeekIterator');
+const ParseException = require('../util/ParseException');
 
 class PeekTokenIterator extends PeekIterator {
   constructor(it) {
