@@ -22,6 +22,10 @@ class ASDNode {
     return this.lexeme;
   }
 
+  setLexeme(lexeme) {
+    this.lexeme = lexeme;
+  }
+
   getLabel() {
     return this.label;
   }
