@@ -1,5 +1,5 @@
 const ASTNode = require('./ASTNode');
-const ASTNodeTypes = require('./ASTNodeTypes');
+const TokenType = require('../../lexer/TokenType');
 
 class Factor extends ASTNode {
   constructor(token) {
@@ -16,7 +16,7 @@ Factor.parse = it => {
   const token = it.peek();
   const type = token.getType();
 
-  if (type == ASTNodeTypes.VARIABLE) {
+  if (type == TokenType.VARIABLE) {
     it.next();
     return new Variable(token);
   } else if (token.isScalar()) {
