@@ -16,7 +16,7 @@ Stmt.parse = it => {
   }
 
   const token = it.next();
-  const lookahead = it.peek();
+  const lookhead = it.peek();
   it.putBack();
 
   if (token.isVariable() && lookhead.getValue() === '=') {
