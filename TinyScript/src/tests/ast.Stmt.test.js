@@ -34,6 +34,30 @@ describe('Stmts', () => {
     assert.equal(assignStmt.getLexeme().getValue(), '=');
     assert.equal(null, elseBlock);
   });
+
+  it('ifElse', () => {
+    const it = createTokenIt(`if(a){
+      a =1
+    } else {
+      a = 2
+      a = a * 3
+      var b = 3 *3
+      if (a < b) {
+        c = d
+      }
+
+    }`);
+
+    const stmt = IfStmt.parse(it);
+    stmt.print();
+    const expr = stmt.getExpr();
+    const block = stmt.getBlock();
+    const assignStmt = block.getChild(0);
+    const elseBlock = stmt.getChild(2);
+    const AssignStmt2 = elseBlock.getChild(2);
+
+    assert.equal(expr.getLexeme().getValue(), 'a');
+  });
 });
 
 function createTokenIt(src) {
