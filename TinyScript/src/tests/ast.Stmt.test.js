@@ -54,9 +54,12 @@ describe('Stmts', () => {
     const block = stmt.getBlock();
     const assignStmt = block.getChild(0);
     const elseBlock = stmt.getChild(2);
-    const AssignStmt2 = elseBlock.getChild(2);
+    const assignStmt2 = elseBlock.getChild(2);
 
     assert.equal(expr.getLexeme().getValue(), 'a');
+    assert.equal(assignStmt.getLexeme().getValue(), '=');
+    assert.equal(assignStmt2.getChild(0).getValue(), 'b');
+    assert.equal(elseBlock.getChildren().length, 4);
   });
 });
 
