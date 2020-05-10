@@ -15,6 +15,7 @@ class ASDNode {
   }
 
   addChild(node) {
+    node.parent = this;
     this.children.push(node);
   }
 
