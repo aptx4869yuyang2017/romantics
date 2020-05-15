@@ -1,36 +1,38 @@
-const PeekIterator = require("../common/PeekIterator");
-const Token = require("./Token");
-const TokenType = require("./TokenType");
-const AlphabetHelper = require("./AlphabetHelper");
-const LexicalException = require("./LexicalException");
+const PeekIterator = require('../common/PeekIterator');
+const arrayToGenerator = require('../common/arrayToGenerator');
+const Token = require('./Token');
+const TokenType = require('./TokenType');
+const AlphabetHelper = require('./AlphabetHelper');
+const LexicalException = require('./LexicalException');
+const fs = require('fs');
 
 class Lexer {
   analyse(source) {
     const tokens = [];
-    const it = new PeekIterator(source, "\0");
+    const it = new PeekIterator(source, '\0');
 
     while (it.hasNext()) {
       let c = it.next();
 
-      if (c === "\0") {
+      if (c === '\0') {
         break;
       }
       let lookahead = it.peek();
 
-      if (c === " " || c === "\n" || c === "\r") {
+      if (c === ' ' || c === '\n' || c === '\r') {
         continue;
       }
 
       // 提取注释的程序
-      if (c == "/") {
-        if (lookahead == "/") {
-          while (it.hasNext() && (c = it.next()) != "\n");
+      if (c == '/') {
+        if (lookahead == '/') {
+          while (it.hasNext() && (c = it.next()) != '\n');
           continue;
-        } else if (lookahead == "*") {
+        } else if (lookahead == '*') {
           let valid = false;
           while (it.hasNext()) {
             const p = it.next();
-            if (p == "*" && it.peek() == "/") {
+            if (p == '*' && it.peek() == '/') {
               valid = true;
               it.next();
               break;
@@ -38,13 +40,13 @@ class Lexer {
           }
 
           if (!valid) {
-            throw new LexicalException("comment not matched");
+            throw new LexicalException('comment not matched');
           }
           continue;
         }
       }
 
-      if (c === "{" || c === "}" || c === "(" || c === ")") {
+      if (c === '{' || c === '}' || c === '(' || c === ')') {
         tokens.push(new Token(TokenType.BRACKET, c));
         continue;
       }
@@ -68,7 +70,7 @@ class Lexer {
       }
 
       // + - 开头的 number
-      if ((c === "+" || c === "-") && AlphabetHelper.isNumber(lookahead)) {
+      if ((c === '+' || c === '-') && AlphabetHelper.isNumber(lookahead)) {
         const lastToken = tokens[tokens.length - 1] || null;
 
         if (lastToken == null || !lastToken.isValue()) {
@@ -88,6 +90,11 @@ class Lexer {
     } // while end
 
     return tokens;
+  }
+  static fromFile(src) {
+    const content = fs.readFileSync(src, 'utf-8');
+    const lexer = new Lexer();
+    return arrayToGenerator(lexer.analyse(arrayToGenerator(content)));
   }
 }
 

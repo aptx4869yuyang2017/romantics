@@ -4,7 +4,14 @@ const PeekTokenIterator = require('../parser/util/PeekTokenIterator');
 const ParserUtils = require('../parser/util/ParserUtils');
 const path = require('path');
 const { assert } = require('chai');
-const { AssignStmt, DeclareStmt, IfStmt } = require('../parser/ast/index');
+const {
+  AssignStmt,
+  DeclareStmt,
+  IfStmt,
+  Stmt,
+  FunctionDecalreStmt,
+  ReturnStmt
+} = require('../parser/ast/index');
 
 describe('Stmts', () => {
   it('assign', () => {
@@ -54,12 +61,45 @@ describe('Stmts', () => {
     const block = stmt.getBlock();
     const assignStmt = block.getChild(0);
     const elseBlock = stmt.getChild(2);
-    const assignStmt2 = elseBlock.getChild(2);
+    const assignStmt2 = elseBlock.getChild(0);
 
     assert.equal(expr.getLexeme().getValue(), 'a');
     assert.equal(assignStmt.getLexeme().getValue(), '=');
-    assert.equal(assignStmt2.getChild(0).getValue(), 'b');
+    assert.equal(assignStmt2.getLexeme().getValue(), '=');
     assert.equal(elseBlock.getChildren().length, 4);
+  });
+
+  it('function', () => {
+    const it = Lexer.fromFile(
+      path.resolve(__dirname, '../../example/function.ts')
+    );
+    const functionStmt = Stmt.parse(new PeekTokenIterator(it));
+
+    const args = functionStmt.getArgs();
+
+    assert.equal(
+      args
+        .getChild(0)
+        .getLexeme()
+        .getValue(),
+      'a'
+    );
+    assert.equal(
+      args
+        .getChild(1)
+        .getLexeme()
+        .getValue(),
+      'b'
+    );
+
+    const type = functionStmt.getFuncType();
+    assert.equal(type, 'int');
+
+    const functionVariable = functionStmt.getFunctionVaribale();
+    assert.equal(functionVariable.getLexeme().getValue(), 'add');
+
+    const block = functionStmt.getBlock();
+    assert.equal(block.getChild(0) instanceof ReturnStmt, true);
   });
 });
 
